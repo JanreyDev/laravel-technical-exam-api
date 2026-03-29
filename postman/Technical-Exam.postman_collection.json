@@ -1,0 +1,235 @@
+{
+  "info": {
+    "_postman_id": "e0c6483c-9fc6-4481-a75a-271ca5dd9b7a",
+    "name": "Technical Exam API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "List Posts",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/posts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "posts"]
+            }
+          }
+        },
+        {
+          "name": "Show Post (external id 1)",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/posts/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "posts", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "List Comments",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/comments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "comments"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Albums",
+      "item": [
+        {
+          "name": "List Albums",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/albums",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "albums"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Photos",
+      "item": [
+        {
+          "name": "List Photos",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/photos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "photos"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Todos",
+      "item": [
+        {
+          "name": "List Todos",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "api@example.com",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "password",
+                  "type": "string"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/v1/todos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["api", "v1", "todos"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

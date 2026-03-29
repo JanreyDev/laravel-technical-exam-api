@@ -1,59 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Technical Exam API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project imports all JSONPlaceholder data into a normalized MySQL database using an Artisan command, then exposes authenticated REST APIs to read the stored data.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 12 + Eloquent models/relationships
+- Normalized database design for:
+  - users, addresses, companies
+  - posts, comments
+  - albums, photos
+  - todos
+- Import command:
+  - `php artisan sync:jsonplaceholder`
+  - `php artisan sync:jsonplaceholder --truncate`
+- Authenticated REST API with HTTP Basic Auth (`auth.basic`)
+- Postman collection included: `postman/Technical-Exam.postman_collection.json`
+- Dockerized app + MySQL via `docker-compose.yml`
+- Automated tests for import command and API authentication
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Database Architecture
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Main table strategy:
 
-## Learning Laravel
+- Keep local auth users in default `users` table.
+- Store JSONPlaceholder users in `placeholder_users` (with unique `external_id`).
+- Split one-to-one details into:
+  - `placeholder_addresses`
+  - `placeholder_companies`
+- Use separate tables for content:
+  - `placeholder_posts`
+  - `placeholder_comments`
+  - `placeholder_albums`
+  - `placeholder_photos`
+  - `placeholder_todos`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Normalization choices:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- `external_id` is unique per JSONPlaceholder entity to support idempotent imports.
+- Foreign keys enforce referential integrity.
+- One-to-one constraints are enforced with unique `placeholder_user_id` in address/company tables.
 
-## Laravel Sponsors
+## Local Setup (Without Docker)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+1. Install dependencies:
+   - `composer install`
+2. Prepare environment:
+   - `cp .env.example .env`
+   - Update DB settings in `.env` (MySQL recommended)
+   - `php artisan key:generate`
+3. Run migrations and create API user:
+   - `php artisan migrate --seed`
+4. Import JSONPlaceholder data:
+   - `php artisan sync:jsonplaceholder`
+5. Start app:
+   - `php artisan serve`
 
-### Premium Partners
+Default seeded API credentials:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Email: `api@example.com`
+- Password: `password`
 
-## Contributing
+## Docker Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Build and start services:
+   - `docker compose up --build`
+2. App URL:
+   - `http://localhost:8000`
 
-## Code of Conduct
+What happens on container startup:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- `.env` is created if missing
+- app key is generated
+- migrations + seeders are executed
+- JSONPlaceholder data is imported
+- app server starts on port 8000
 
-## Security Vulnerabilities
+MySQL is exposed on host port `3307`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## API Authentication Guide
 
-## License
+Authentication scheme: HTTP Basic Auth.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Use these credentials in Postman or any REST client:
+
+- Username: `api@example.com`
+- Password: `password`
+
+If no credentials are sent, API returns `401 Unauthorized`.
+
+## API Endpoints
+
+All endpoints are prefixed with `/api/v1` and require Basic Auth.
+
+- `GET /users`
+- `GET /users/{externalId}`
+- `GET /posts`
+- `GET /posts/{externalId}`
+- `GET /comments`
+- `GET /comments/{externalId}`
+- `GET /albums`
+- `GET /albums/{externalId}`
+- `GET /photos`
+- `GET /photos/{externalId}`
+- `GET /todos`
+- `GET /todos/{externalId}`
+
+Optional query parameter:
+
+- `per_page` (default: 25, max: 100)
+
+## Postman Testing
+
+1. Import collection:
+   - `postman/Technical-Exam.postman_collection.json`
+2. Ensure `localhost:8000` is running.
+3. Run requests directly (Basic Auth is prefilled in the collection).
+
+## Useful Commands
+
+- Import data:
+  - `php artisan sync:jsonplaceholder`
+- Re-import from scratch:
+  - `php artisan sync:jsonplaceholder --truncate`
+- Run tests:
+  - `php artisan test`
+
+## Efficiency Notes
+
+- Data import uses bulk `upsert()` operations for idempotent and efficient syncing.
+- External-to-local ID maps avoid duplicate inserts and maintain foreign-key consistency.
+- API endpoints use pagination and eager loading to reduce query count.
